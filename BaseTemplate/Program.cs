@@ -7,6 +7,15 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+//Configurando CORS
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: "Enable Cors", builder =>
+    {
+        builder.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin();
+    });
+});
 string myAppDbContextConnection = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<SuperMarketDbContext>(op => op.UseSqlServer(myAppDbContextConnection),
     ServiceLifetime.Transient);
@@ -42,6 +51,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors("Enable Cors");
 
 app.UseHttpsRedirection();
 
